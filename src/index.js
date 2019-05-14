@@ -3,20 +3,26 @@ const path = require('path')
 const Routes = require('next-routes')
 const appRoot = require('app-root-path')
 
-const convertToPattern = (str) => str
-  .split('/index').join('')
-  .split('_').map(section => {
-    if (section[0] === '_') {
-      return section.substr(1)
-    }
-    return section
-  })
-  .join(':')
+const convertToPattern = str =>
+  str
+    .split('/index')
+    .join('')
+    .split('$')
+    .map(section => {
+      if (section[0] === '$') {
+        return section.substr(1)
+      }
+      return section
+    })
+    .join(':')
 
-const convertToName = (str) => convertToPattern(str)
-  .substr(1)
-  .split(':').join('')
-  .split('/').join('-')
+const convertToName = str =>
+  convertToPattern(str)
+    .substr(1)
+    .split(':')
+    .join('')
+    .split('/')
+    .join('-')
 
 const ignoredFiles = ['_error', '_document', '_app'].reduce(
   (memo, file) => memo.concat([`${file}.js`, `${file}.jsx`, `${file}.ts`, `${file}.tsx`]),
